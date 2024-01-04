@@ -104,13 +104,14 @@ func Process(service interface{}) gin.HandlerFunc {
 		}
 
 		// validating and converting params
-		if call.Type().NumIn() != len(params) {
-			jsonrpcError(c, -32602, "Invalid params", "Invalid number of params", &id)
-			return
-		}
+		// if call.Type().NumIn() != len(params) {
+		// 	jsonrpcError(c, -32602, "Invalid params", "Invalid number of params", &id)
+		// 	return
+		// }
 
 		args := make([]reflect.Value, len(params))
 		for i, arg := range params {
+
 			switch call.Type().In(i).Kind() {
 			case reflect.Float32:
 				val, ok := arg.(float32)
@@ -224,11 +225,11 @@ func Process(service interface{}) gin.HandlerFunc {
 				args[i] = reflect.ValueOf(val)
 
 			case reflect.String:
-				val, ok := arg.(string)
-				if !ok {
-					jsonrpcError(c, -32602, "Invalid params", fmt.Sprintf("Param [%d] can't be converted to %v", i, call.Type().In(i).String()), &id)
-					return
-				}
+				val, _ := arg.(string)
+				// if !ok {
+				// 	// jsonrpcError(c, -32602, "Invalid params", fmt.Sprintf("Param [%d] can't be converted to %v", i, call.Type().In(i).String()), &id)
+				// 	// return
+				// }
 				args[i] = reflect.ValueOf(val)
 
 			case reflect.Uint:
