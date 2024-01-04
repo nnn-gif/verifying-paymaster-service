@@ -121,7 +121,8 @@ type PaymasterResult struct {
 	CallGasLimit         string `json:"callGasLimit"`
 }
 
-func (s *Signer) Pm_sponsorUserOperation(op map[string]any, entryPoint string, ctx interface{}) (*PaymasterResult, error) {
+func (s *Signer) Pm_sponsorUserOperation(op map[string]any, entryPoint string) (*PaymasterResult, error) {
+	entryPoint = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"
 	userOp, err := types.NewUserOperation(op)
 	if err != nil {
 		return nil, err
@@ -145,18 +146,20 @@ func (s *Signer) Pm_sponsorUserOperation(op map[string]any, entryPoint string, c
 		// }
 	}
 
-	tempOp, _ := types.NewUserOperation(op)
-	preVerificationGas, verificationGas, callGas, err := estimate(
-		s.Client,
-		s.PrivateKey,
-		s.Contract,
-		s.Paymaster,
-		common.HexToAddress(entryPoint),
-		tempOp,
-	)
-	if err != nil {
-		return nil, err
-	}
+	// tempOp, _ := types.NewUserOperation(op)
+	// preVerificationGas, verificationGas, callGas, err := estimate(
+	// 	s.Client,
+	// 	s.PrivateKey,
+	// 	s.Contract,
+	// 	s.Paymaster,
+	// 	common.HexToAddress(entryPoint),
+	// 	tempOp,
+	// )
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	preVerificationGas, verificationGas, callGas, err := big.NewInt(52304), big.NewInt(100000), big.NewInt(33100), nil
 
 	remainGas, _ := new(big.Int).SetString(account.RemainGas, 10)
 	totalGas := new(big.Int).Add(preVerificationGas, verificationGas)
